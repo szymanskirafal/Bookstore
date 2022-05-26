@@ -1,6 +1,6 @@
 # Dockerfile
 # Pull base image
-FROM python:3.9.1-slim
+FROM python:3.10.0-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1

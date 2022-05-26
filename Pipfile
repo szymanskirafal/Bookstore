@@ -5,6 +5,14 @@ name = "pypi"
 
 [packages]
 django = "*"
+psycopg2-binary = "*"
+django-allauth = "*"
+environs = {extras = ["django"], version = "*"}
+djangorestframework = "*"
+django-cors-headers = "*"
+dj-rest-auth = "*"
+gunicorn = "*"
+dj-database-url = "*"
 
 [dev-packages]
 
