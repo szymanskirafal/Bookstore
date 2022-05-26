@@ -1,21 +1,21 @@
-# docker-compose.yml
+# docker-compose-prod.yml
 version: '3.8'
 
 services:
   web:
     build: .
     command: python /code/manage.py runserver 0.0.0.0:8000
-    environment:
-      - ENVIRONMENT=development
-      - DJANGO_DEBUG=True
-      - DJANGO_SECRET_KEY=django-insecure-f!oj+7qr_u%n4zw-v0qn!e3#m6)%^s%4@5m2l3*!lickbbqg8a
+    command: gunicorn config.wsgi -b 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
       - 8000:8000
     depends_on:
       - db
-
+    environment:
+      - ENVIRONMENT=production
+      - "DJANGO_DEBUG=0"
+      - "DJANGO_SECRET_KEY=django-insecure-f!oj+7qr_u%n4zw-v0qn!e3#m6)%^s%4@5m2l3*!lickbbqg8a"
 
   db:
     image: postgres:13
