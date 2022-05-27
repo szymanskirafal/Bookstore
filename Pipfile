@@ -15,6 +15,7 @@ gunicorn = "*"
 dj-database-url = "*"
 whitenoise = "*"
 django-filter = "*"
+requests = "*"
 
 [dev-packages]
 

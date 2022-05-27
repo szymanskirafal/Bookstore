@@ -8,7 +8,7 @@ router = routers.SimpleRouter()
 router.register(r'books', BooksViewSet)
 
 urlpatterns = [
-    # path('forgot-password/', ForgotPasswordFormView.as_view()),
+    path('import/', ImportAPIView.as_view()),
 ]
 
 urlpatterns += router.urls
