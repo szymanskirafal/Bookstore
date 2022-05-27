@@ -10,5 +10,10 @@ class Book(models.Model):
     acquired = models.BooleanField(default=False)
     thumbnail = models.URLField(blank=True)
 
+    class Meta:
+        constraints = [
+                models.UniqueConstraint(fields=["title", "authors"], name='unique title - authors'),
+        ]
+
     def __str__(self):
         return f"Book - {self.title} {self.authors}"

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
 
@@ -155,15 +156,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DRF
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-
-       'rest_framework.permissions.IsAuthenticated',
-    ],
-
-   'DEFAULT_AUTHENTICATION_CLASSES': [
+       'rest_framework.permissions.IsAuthenticated',],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-
-], }
+        'rest_framework.authentication.TokenAuthentication',],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'],}
 
 # static
 STATIC_URL = '/static/'
@@ -171,8 +169,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",]
 
 # django-allauth
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
