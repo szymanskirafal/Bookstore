@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 import requests
 
@@ -8,6 +9,11 @@ from .filters import BookFilter
 from .models import Book
 from .serializers import BookSerializer, BookImportSerializer
 
+
+class ApiSpecAPIView(APIView):
+    def get(self, request, format=None):
+        version = {"info": {"version": "2022.05.16"}}
+        return Response(version, status=status.HTTP_200_OK)
 
 class BooksViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
