@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 import requests
 
-from .filters import ProductFilter
+from .filters import BookFilter
 from .models import Book
 from .serializers import BookSerializer, BookImportSerializer
 
@@ -13,7 +13,7 @@ class BooksViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_class = ProductFilter
+    filterset_class = BookFilter
 
 
 class ImportCreateAPIView(generics.CreateAPIView):
