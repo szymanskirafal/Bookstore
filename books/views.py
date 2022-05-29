@@ -6,7 +6,7 @@ import requests
 
 from .filters import ProductFilter
 from .models import Book
-from .serializers import BookSerializer, Book2Serializer
+from .serializers import BookSerializer, BookImportSerializer
 
 
 class BooksViewSet(viewsets.ModelViewSet):
@@ -18,7 +18,7 @@ class BooksViewSet(viewsets.ModelViewSet):
 
 class ImportCreateAPIView(generics.CreateAPIView):
     queryset = Book.objects.all()
-    serializer_class = Book2Serializer
+    serializer_class = BookImportSerializer
 
     def create(self, request, *args, **kwargs):
         author = self.request.query_params.get('authors')
@@ -42,4 +42,6 @@ class ImportCreateAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        books_imported = len(response['items'])
+        dict_books_imported = {'imported': books_imported}
+        return Response(dict_books_imported, status=status.HTTP_201_CREATED, headers=headers)

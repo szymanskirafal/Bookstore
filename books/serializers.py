@@ -2,6 +2,23 @@ from rest_framework import serializers
 from .models import Book
 
 
+class BookListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        books = []
+        for item in validated_data:
+            book, created = Book.objects.update_or_create(
+                external_id=item['external_id'],
+                defaults={
+                    'external_id': item['external_id'],
+                    'title': item['title'],
+                    'authors': item['authors'],
+                    'published_year': item['published_year'],
+                    'thumbnail': item['thumbnail'],
+                    },)
+            books.append(book)
+        return books
+
+
 class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -15,9 +32,10 @@ class BookSerializer(serializers.ModelSerializer):
             "acquired",
             "thumbnail",
         ]
+        list_serializer_class = BookListSerializer
 
 
-class Book2Serializer(serializers.ModelSerializer):
+class BookImportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book

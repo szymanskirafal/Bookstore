@@ -9,6 +9,8 @@ def test_import():
     response = requests.get(url_au)
     response = response.json()
     data = []
+    print(' ----- imported: ', len(response['items']))
+    print(' ----- type: ', type(response['items']))
     for item in response['items']:
         d = {}
         d['external_id'] = item['id']
