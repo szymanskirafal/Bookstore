@@ -35,10 +35,5 @@ class BookSerializer(serializers.ModelSerializer):
         list_serializer_class = BookListSerializer
 
 
-class BookImportSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Book
-        fields = [
-            "authors",
-        ]
+class ImportSerializer(serializers.Serializer):
+    author = serializers.CharField(max_length=200)

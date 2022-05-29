@@ -7,7 +7,7 @@ import requests
 
 from .filters import BookFilter
 from .models import Book
-from .serializers import BookSerializer, BookImportSerializer
+from .serializers import BookSerializer, ImportSerializer
 
 
 class ApiSpecAPIView(APIView):
@@ -24,14 +24,15 @@ class BooksViewSet(viewsets.ModelViewSet):
 
 class ImportCreateAPIView(generics.CreateAPIView):
     queryset = Book.objects.all()
-    serializer_class = BookImportSerializer
+    serializer_class = ImportSerializer
 
     def create(self, request, *args, **kwargs):
-        author = self.request.query_params.get('authors')
-        google_books_url = 'https://www.googleapis.com/books/v1/volumes?q=author:'
-        author = str(author)
+
+        author = self.request.query_params.get('author')
+        google_books_url = 'https://www.googleapis.com/books/v1/volumes?q=author:Diana'
+        author = 'Diana'
         url = google_books_url+author
-        response = requests.get(url)
+        response = requests.get(google_books_url)
         response = response.json()
         data = []
         for item in response['items']:

@@ -38,6 +38,38 @@ class ImportCreateAPIViewTests(APITestCase):
         url = reverse("import")
         data={'authors': ["Brown"]}
         response = self.client.post(url, data=data, format="json")
-        print(' rrrresp ', response.data)
         assert response.data == {'imported':10}
         assert response.status_code == status.HTTP_201_CREATED
+
+    def test_import_create(self):
+        url = reverse("import")
+        data={'authors': "['Brown']"}
+        response = self.client.post(url, data=data, format="json")
+        #print(' resp: ', response.query_params)
+        books = Book.objects.all()
+        #.filter(authors=['Brown']).exists()
+        for book in books:
+            print('book: ', book)
+
+    def test_req(self):
+        url = 'https://www.googleapis.com/books/v1/volumes?q=author:'
+        author = 'Diana'
+        url_au = url+author
+        response = requests.get(url_au)
+        response = response.json()
+        data = []
+        print(' ----- url: ', url_au)
+        print(' ----- imported: ', len(response['items']))
+        print(' ----- type: ', type(response['items']))
+        for item in response['items']:
+            d = {}
+            d['external_id'] = item['id']
+            d['title'] = item['volumeInfo']['title']
+            d['authors'] = item['volumeInfo']['authors']
+            print('date: ', item['volumeInfo']['publishedDate'][0:4], type(item['volumeInfo']['publishedDate']))
+            d['published_year'] = item['volumeInfo']['publishedDate']
+            for k,v in item['volumeInfo'].items():
+                if k == 'imageLinks':
+                    d['thumbnail'] = v['thumbnail']
+                    data.append(d)
+        print(' - data: ', data)
