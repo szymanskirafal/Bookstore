@@ -2,18 +2,13 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 class Book(models.Model):
-    external_id = models.CharField(blank=True, max_length=300)
+    external_id = models.CharField(blank=True, max_length=300, unique=True)
     title = models.CharField(max_length=500)
     authors = ArrayField(
         models.CharField(max_length=200))
-    published_year = models.PositiveSmallIntegerField()
+    published_year = models.PositiveSmallIntegerField(blank=True, null=True)
     acquired = models.BooleanField(default=False)
     thumbnail = models.URLField(blank=True)
-
-    class Meta:
-        constraints = [
-                models.UniqueConstraint(fields=["title", "authors"], name='unique title - authors'),
-        ]
 
     def __str__(self):
         return f"Book - {self.title} {self.authors}"

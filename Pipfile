@@ -16,6 +16,7 @@ dj-database-url = "*"
 whitenoise = "*"
 django-filter = "*"
 requests = "*"
+pytest-django = "*"
 
 [dev-packages]
 

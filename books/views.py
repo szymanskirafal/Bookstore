@@ -1,11 +1,12 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, viewsets
+from rest_framework import generics, status, viewsets
+from rest_framework.response import Response
 
 import requests
 
 from .filters import ProductFilter
 from .models import Book
-from .serializers import BookSerializer
+from .serializers import BookSerializer, Book2Serializer
 
 
 class BooksViewSet(viewsets.ModelViewSet):
@@ -15,12 +16,16 @@ class BooksViewSet(viewsets.ModelViewSet):
     filterset_class = ProductFilter
 
 
-class ImportCreateAPIView(generics.CreateAPIView)
+class ImportCreateAPIView(generics.CreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = Book2Serializer
 
     def create(self, request, *args, **kwargs):
-        url = https://www.googleapis.com/books/v1/volumes?q=Hobbit
-        author = request.query_params
-        response = requests.get(url, params=author)
+        author = self.request.query_params.get('authors')
+        google_books_url = 'https://www.googleapis.com/books/v1/volumes?q=author:'
+        author = str(author)
+        url = google_books_url+author
+        response = requests.get(url)
         response = response.json()
         data = []
         for item in response['items']:
@@ -28,10 +33,12 @@ class ImportCreateAPIView(generics.CreateAPIView)
             d['external_id'] = item['id']
             d['title'] = item['volumeInfo']['title']
             d['authors'] = item['volumeInfo']['authors']
-            d['published_year'] = item['volumeInfo']['publishedDate']
-            d['thumbnail'] = item['volumeInfo']['imageLinks']['smallThumbnail']
-            data.append(d)
-        serializer = self.get_serializer(data=data, many=True)
+            d['published_year'] = item['volumeInfo']['publishedDate'][0:4]
+            for k,v in item['volumeInfo'].items():
+                if k == 'imageLinks':
+                    d['thumbnail'] = v['thumbnail']
+                    data.append(d)
+        serializer = BookSerializer(data=data, many=True)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)

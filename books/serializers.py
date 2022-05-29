@@ -15,3 +15,12 @@ class BookSerializer(serializers.ModelSerializer):
             "acquired",
             "thumbnail",
         ]
+
+
+class Book2Serializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Book
+        fields = [
+            "authors",
+        ]
