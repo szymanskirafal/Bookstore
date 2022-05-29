@@ -27,10 +27,9 @@ class ImportCreateAPIView(generics.CreateAPIView):
     serializer_class = ImportSerializer
 
     def create(self, request, *args, **kwargs):
-
         author = self.request.query_params.get('author')
-        google_books_url = 'https://www.googleapis.com/books/v1/volumes?q=author:Diana'
-        author = 'Diana'
+        google_books_url = 'https://www.googleapis.com/books/v1/volumes?q=author:Tom'
+        author = 'Tom'
         url = google_books_url+author
         response = requests.get(google_books_url)
         response = response.json()

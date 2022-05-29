@@ -36,4 +36,4 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class ImportSerializer(serializers.Serializer):
-    author = serializers.CharField(max_length=200)
+    author = serializers.CharField(max_length=200, required=True)
