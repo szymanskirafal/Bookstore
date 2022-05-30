@@ -27,11 +27,11 @@ class ImportCreateAPIView(generics.CreateAPIView):
     serializer_class = ImportSerializer
 
     def create(self, request, *args, **kwargs):
-        author = self.request.query_params.get('author')
-        google_books_url = 'https://www.googleapis.com/books/v1/volumes?q=author:Tom'
-        author = 'Tom'
+        author = self.request.data['author']
+        google_books_url = 'https://www.googleapis.com/books/v1/volumes?q=author:'
+        author = str(author)
         url = google_books_url+author
-        response = requests.get(google_books_url)
+        response = requests.get(url)
         response = response.json()
         data = []
         for item in response['items']:
@@ -48,6 +48,6 @@ class ImportCreateAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        books_imported = len(response['items'])
+        books_imported = len(data)
         dict_books_imported = {'imported': books_imported}
         return Response(dict_books_imported, status=status.HTTP_201_CREATED, headers=headers)
